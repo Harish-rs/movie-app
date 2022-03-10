@@ -1,6 +1,7 @@
 // import logo from "./logo.svg";
 import "./App.css";
 import { Counter } from "./Counter";
+import { useState } from "react";
 
 function App() {
   const movielist = [
@@ -92,6 +93,11 @@ function Movies({ movie }) {
   const styles = {
     color: movie.rating > 8 ? "green" : "red",
   };
+  const [show, setShow] = useState(false);
+  const parastyles = {
+    display: show ? "block" : "none",
+  };
+  console.log(show);
   return (
     <div className="movie-container">
       <img src={movie.poster} alt={movie.name} className="movieposter" />
@@ -101,8 +107,12 @@ function Movies({ movie }) {
           ⭐{movie.rating}
         </p>
       </div>
-
-      <p className="movie-summary">{movie.summary}</p>
+      <button onClick={() => setShow(!show)} className="toggle">
+        Toogle Description
+      </button>
+      <p style={parastyles} className="movie-summary">
+        {movie.summary}
+      </p>
       <Counter />
     </div>
   );
