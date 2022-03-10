@@ -22,4 +22,10 @@
   justify-content: space-around;
   gap: 10px;
   flex-wrap: wrap;
+  margin-top: "10px";
+}
+.addmovie-form {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
 }
