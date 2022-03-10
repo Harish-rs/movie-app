@@ -108,7 +108,7 @@ function Movies({ movie }) {
         </p>
       </div>
       <button onClick={() => setShow(!show)} className="toggle">
-        Toogle Description
+        Summary
       </button>
       <p style={parastyles} className="movie-summary">
         {movie.summary}
