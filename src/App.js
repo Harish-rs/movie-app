@@ -2,6 +2,8 @@
 import "./App.css";
 import { Counter } from "./Counter";
 import { useState } from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 // import { Addcolor } from "./ColorBox";
 const Initial_MOVIE_LIST = [
   {
@@ -77,23 +79,32 @@ function App() {
     <div className="App">
       {/* <Addcolor /> */}
       <div className="addmovie-form">
-        <input
+        <TextField
+          id="standard-basic"
           onChange={(event) => setname(event.target.value)}
-          placeholder="Enter Movie name"
+          label="Enter Movie name"
+          variant="standard"
         />
-        <input
+        <TextField
+          id="standard-basic"
           onChange={(event) => setposter(event.target.value)}
-          placeholder="Enter Movie poster URL"
+          label="Enter Movie poster URL"
+          variant="standard"
         />
-        <input
+        <TextField
+          id="standard-basic"
           onChange={(event) => setrating(event.target.value)}
-          placeholder="Enter Movie rating"
+          label="Enter Movie rating"
+          variant="standard"
         />
-        <input
+        <TextField
+          id="standard-basic"
           onChange={(event) => setsummary(event.target.value)}
-          placeholder="Enter Movie summary"
+          label="Enter Movie summary"
+          variant="standard"
         />
-        <button
+        <Button
+          variant="contained"
           onClick={() => {
             const newMovie = {
               name: name,
@@ -105,7 +116,7 @@ function App() {
           }}
         >
           AddMovie
-        </button>
+        </Button>
       </div>
 
       <div className="movie-component">
@@ -131,9 +142,6 @@ function Movies({ movie }) {
     color: movie.rating > 8 ? "green" : "red",
   };
   const [show, setShow] = useState(false);
-  const parastyles = {
-    display: show ? "block" : "none",
-  };
   return (
     <div className="movie-container">
       <img src={movie.poster} alt={movie.name} className="movieposter" />
@@ -146,9 +154,7 @@ function Movies({ movie }) {
       <button onClick={() => setShow(!show)} className="toggle">
         Summary
       </button>
-      <p style={parastyles} className="movie-summary">
-        {movie.summary}
-      </p>
+      {show ? <p className="movie-summary">{movie.summary} </p> : ""}
       <Counter />
     </div>
   );
