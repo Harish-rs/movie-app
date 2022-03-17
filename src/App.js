@@ -1,9 +1,17 @@
 // import logo from "./logo.svg";
 import "./App.css";
 import { Counter } from "./Counter";
+import { Addcolor } from "./ColorBox";
 import { useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { NavLink, Route, Routes, useNavigate } from "react-router-dom";
+import InfoIcon from "@mui/icons-material/Info";
+import { MovieDetails } from "./MovieDetails";
+
 // import { Addcolor } from "./ColorBox";
 const Initial_MOVIE_LIST = [
   {
@@ -13,6 +21,7 @@ const Initial_MOVIE_LIST = [
     rating: 8.8,
     summary:
       "RRR is an upcoming Indian Telugu-language period action drama film directed by S. S. Rajamouli, and produced by D. V. V. Danayya of DVV Entertainments.",
+    trailer: "https://www.youtube.com/embed/f_vbAtFSEc0",
   },
   {
     name: "Iron man 2",
@@ -21,6 +30,7 @@ const Initial_MOVIE_LIST = [
     rating: 7,
     summary:
       "With the world now aware that he is Iron Man, billionaire inventor Tony Stark (Robert Downey Jr.) faces pressure from all sides to share his technology with the military. He is reluctant to divulge the secrets of his armored suit, fearing the information will fall into the wrong hands. With Pepper Potts (Gwyneth Paltrow) and Rhodes (Don Cheadle) by his side, Tony must forge new alliances and confront a powerful new enemy.",
+    trailer: "https://www.youtube.com/embed/wKtcmiifycU",
   },
   {
     name: "No Country for Old Men",
@@ -29,6 +39,7 @@ const Initial_MOVIE_LIST = [
     rating: 8.1,
     summary:
       "A hunter's life takes a drastic turn when he discovers two million dollars while strolling through the aftermath of a drug deal. He is then pursued by a psychopathic killer who wants the money.",
+    trailer: "https://www.youtube.com/embed/38A__WT3-o0",
   },
   {
     name: "Jai Bhim",
@@ -37,6 +48,7 @@ const Initial_MOVIE_LIST = [
     summary:
       "A tribal woman and a righteous lawyer battle in court to unravel the mystery around the disappearance of her husband, who was picked up the police on a false case",
     rating: 8.8,
+    trailer: "https://www.youtube.com/embed/nnXpbTFrqXA",
   },
   {
     name: "The Avengers",
@@ -45,6 +57,7 @@ const Initial_MOVIE_LIST = [
       "Marvel's The Avengers (classified under the name Marvel Avengers\n Assemble in the United Kingdom and Ireland), or simply The Avengers, is\n a 2012 American superhero film based on the Marvel Comics superhero team\n of the same name.",
     poster:
       "https://terrigen-cdn-dev.marvel.com/content/prod/1x/avengersendgame_lob_crd_05.jpg",
+    trailer: "https://www.youtube.com/embed/eOrNdBpGMv8",
   },
   {
     name: "Interstellar",
@@ -52,6 +65,7 @@ const Initial_MOVIE_LIST = [
     rating: 8.6,
     summary:
       "When Earth becomes uninhabitable in the future, a farmer and ex-NASA\n pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team\n of researchers, to find a new planet for humans.",
+    trailer: "https://www.youtube.com/embed/zSWdZVtXT7E",
   },
   {
     name: "Baahubali",
@@ -59,6 +73,7 @@ const Initial_MOVIE_LIST = [
     rating: 8,
     summary:
       "In the kingdom of Mahishmati, Shivudu falls in love with a young warrior woman. While trying to woo her, he learns about the conflict-ridden past of his family and his true legacy.",
+    trailer: "https://www.youtube.com/embed/sOEg_YZQsTI",
   },
   {
     name: "Ratatouille",
@@ -67,14 +82,58 @@ const Initial_MOVIE_LIST = [
     rating: 8,
     summary:
       "Remy, a rat, aspires to become a renowned French chef. However, he fails to realise that people despise rodents and will never enjoy a meal cooked by him.",
+    trailer: "https://www.youtube.com/embed/NgsQ8mVkN8w",
   },
 ];
 function App() {
   const [movielist, setmovielist] = useState(Initial_MOVIE_LIST);
+  return (
+    <div className="app">
+      <ul>
+        <li>
+          <NavLink to="/">🏠</NavLink>
+        </li>
+        <li>
+          <NavLink to="/movies">Movies</NavLink>
+        </li>
+        <li>
+          <NavLink to="/colorbox">ColorBox</NavLink>
+        </li>
+      </ul>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/movies"
+          element={
+            <Movielist movielist={movielist} setmovielist={setmovielist} />
+          }
+        />
+        <Route
+          path="/movies/:id"
+          element={<MovieDetails movielist={movielist} />}
+        />
+        <Route path="/colorbox" element={<Addcolor />} />
+      </Routes>
+    </div>
+  );
+}
+export default App;
+
+function Home() {
+  return (
+    <div>
+      <h2>Welcome to Home</h2>
+    </div>
+  );
+}
+
+function Movielist({ movielist, setmovielist }) {
   const [name, setname] = useState("");
   const [poster, setposter] = useState("");
   const [rating, setrating] = useState("");
   const [summary, setsummary] = useState("");
+  const [trailer, settrailer] = useState("");
   return (
     <div className="App">
       {/* <Addcolor /> */}
@@ -103,6 +162,12 @@ function App() {
           label="Enter Movie summary"
           variant="standard"
         />
+        <TextField
+          id="standard-basic"
+          onChange={(event) => settrailer(event.target.value)}
+          label="Enter Movie Trailer URL"
+          variant="standard"
+        />
         <Button
           variant="contained"
           onClick={() => {
@@ -111,6 +176,7 @@ function App() {
               poster: poster,
               rating: rating,
               summary: summary,
+              trailer: trailer,
             };
             setmovielist([...movielist, newMovie]);
           }}
@@ -120,24 +186,16 @@ function App() {
       </div>
 
       <div className="movie-component">
-        {movielist.map((mv) => (
-          <Movies movie={mv} />
+        {movielist.map((mv, index) => (
+          <Movies movie={mv} id={index} />
         ))}
       </div>
     </div>
   );
 }
-export default App;
 
-function Movies({ movie }) {
-  // const movie = {
-  //   name: "RRR",
-  //   poster:
-  //     "https://englishtribuneimages.blob.core.windows.net/gallary-content/2021/6/Desk/2021_6$largeimg_977224513.JPG",
-  //   rating: 8.8,
-  //   summary:
-  //     "RRR is an upcoming Indian Telugu-language period action drama film directed by S. S. Rajamouli, and produced by D. V. V. Danayya of DVV Entertainments.",
-  // };
+function Movies({ movie, id }) {
+  const navigate = useNavigate();
   const styles = {
     color: movie.rating > 8 ? "green" : "red",
   };
@@ -146,14 +204,30 @@ function Movies({ movie }) {
     <div className="movie-container">
       <img src={movie.poster} alt={movie.name} className="movieposter" />
       <div className="movie-spec">
-        <h2 className="movie-name">{movie.name}</h2>
+        <h2 className="movie-name">
+          {movie.name}
+          <IconButton
+            onClick={() => setShow(!show)}
+            className="toggle"
+            aria-label="Movie summmary"
+            color="primary"
+          >
+            {show ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          </IconButton>
+          <IconButton
+            onClick={() => navigate(`/movies/${id}`)}
+            aria-label="Movie Info"
+            color="primary"
+          >
+            <InfoIcon />
+          </IconButton>
+        </h2>
+
         <p style={styles} className="movie-poster">
           ⭐{movie.rating}
         </p>
       </div>
-      <button onClick={() => setShow(!show)} className="toggle">
-        Summary
-      </button>
+
       {show ? <p className="movie-summary">{movie.summary} </p> : ""}
       <Counter />
     </div>

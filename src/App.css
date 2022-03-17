@@ -29,3 +29,7 @@
   justify-content: space-evenly;
   flex-wrap: wrap;
 }
+
+.movie-detail-container {
+  max-width: 800px;
+}
