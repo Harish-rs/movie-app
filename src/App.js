@@ -10,12 +10,22 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Card from "@mui/material/Card";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
 
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import InfoIcon from "@mui/icons-material/Info";
 import { MovieDetails } from "./MovieDetails";
 import { Home, NotFoundPage } from "./NotFoundPage";
-import { AppBar, CardActions, CardContent, Toolbar } from "@mui/material";
+import {
+  AppBar,
+  CardActions,
+  CardContent,
+  createTheme,
+  Paper,
+  ThemeProvider,
+  Toolbar,
+} from "@mui/material";
 // import Box from "@mui/material/Box";
 
 // import { Addcolor } from "./ColorBox";
@@ -91,56 +101,95 @@ const Initial_MOVIE_LIST = [
     trailer: "https://www.youtube.com/embed/NgsQ8mVkN8w",
   },
 ];
-function App() {
+
+export default function App() {
+  const [mode, setMode] = useState("light");
+  const theme = createTheme({
+    palette: {
+      mode: mode,
+    },
+  });
   const [movielist, setmovielist] = useState(Initial_MOVIE_LIST);
   const navigate = useNavigate();
 
   return (
-    <div className="app">
-      <AppBar position="static">
-        <Toolbar>
-          <Button color="inherit" onClick={() => navigate("/")}>
-            🏠
-          </Button>
-          <Button color="inherit" onClick={() => navigate("/movies")}>
-            Movies
-          </Button>
-          <Button color="inherit" onClick={() => navigate("/colorbox")}>
-            ColorBox
-          </Button>
-          <Button color="inherit" onClick={() => navigate("/movies/AddMovie")}>
-            Add Movie
-          </Button>
-        </Toolbar>
-      </AppBar>
-      <div className="router-container">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/movies"
-            element={
-              <Movielist movielist={movielist} setmovielist={setmovielist} />
-            }
-          />
-          <Route
-            path="/movies/:id"
-            element={<MovieDetails movielist={movielist} />}
-          />
-          <Route path="/colorbox" element={<Addcolor />} />
-          <Route
-            path="/movies/AddMovie"
-            element={
-              <AddMovie movielist={movielist} setmovielist={setmovielist} />
-            }
-          />
-          <Route path="/404" element={<NotFoundPage />} />
-          <Route path="*" element={<Navigate replace to="/404" />} />
-        </Routes>
-      </div>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Paper style={{ borderRadius: 0, minHeight: "100vh" }} elevation={5}>
+        <div className="app">
+          <AppBar position="static">
+            <Toolbar>
+              <Button color="inherit" onClick={() => navigate("/")}>
+                🏠
+              </Button>
+              <Button color="inherit" onClick={() => navigate("/movies")}>
+                Movies
+              </Button>
+              <Button color="inherit" onClick={() => navigate("/colorbox")}>
+                ColorBox
+              </Button>
+              <Button
+                color="inherit"
+                onClick={() => navigate("/movies/AddMovie")}
+              >
+                Add Movie
+              </Button>
+
+              <div>
+                <Button
+                  startIcon={
+                    mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />
+                  }
+                  color="inherit"
+                  onClick={() => setMode(mode === "light" ? "dark" : "light")}
+                >
+                  {mode === "light" ? "dark" : "light"} mode
+                </Button>
+              </div>
+              {/* <IconButton
+              sx={{ ml: 1 }}
+              onClick={colorMode.toggleColorMode}
+              color="inherit"
+            >
+              {theme.palette.mode === "dark" ? (
+                <Brightness7Icon />
+              ) : (
+                <Brightness4Icon />
+              )}
+            </IconButton> */}
+            </Toolbar>
+          </AppBar>
+          <div className="router-container">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/movies"
+                element={
+                  <Movielist
+                    movielist={movielist}
+                    setmovielist={setmovielist}
+                  />
+                }
+              />
+              <Route
+                path="/movies/:id"
+                element={<MovieDetails movielist={movielist} />}
+              />
+              <Route path="/colorbox" element={<Addcolor />} />
+              <Route
+                path="/movies/AddMovie"
+                element={
+                  <AddMovie movielist={movielist} setmovielist={setmovielist} />
+                }
+              />
+              <Route path="/404" element={<NotFoundPage />} />
+              <Route path="*" element={<Navigate replace to="/404" />} />
+            </Routes>
+          </div>
+        </div>
+      </Paper>
+    </ThemeProvider>
   );
 }
-export default App;
 
 function AddMovie({ movielist, setmovielist }) {
   const navigate = useNavigate();
