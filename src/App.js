@@ -8,9 +8,15 @@ import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { NavLink, Route, Routes, useNavigate } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Card from "@mui/material/Card";
+
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import InfoIcon from "@mui/icons-material/Info";
 import { MovieDetails } from "./MovieDetails";
+import { Home, NotFoundPage } from "./NotFoundPage";
+import { AppBar, CardActions, CardContent, Toolbar } from "@mui/material";
+// import Box from "@mui/material/Box";
 
 // import { Addcolor } from "./ColorBox";
 const Initial_MOVIE_LIST = [
@@ -87,56 +93,64 @@ const Initial_MOVIE_LIST = [
 ];
 function App() {
   const [movielist, setmovielist] = useState(Initial_MOVIE_LIST);
+  const navigate = useNavigate();
+
   return (
     <div className="app">
-      <ul>
-        <li>
-          <NavLink to="/">🏠</NavLink>
-        </li>
-        <li>
-          <NavLink to="/movies">Movies</NavLink>
-        </li>
-        <li>
-          <NavLink to="/colorbox">ColorBox</NavLink>
-        </li>
-      </ul>
-
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/movies"
-          element={
-            <Movielist movielist={movielist} setmovielist={setmovielist} />
-          }
-        />
-        <Route
-          path="/movies/:id"
-          element={<MovieDetails movielist={movielist} />}
-        />
-        <Route path="/colorbox" element={<Addcolor />} />
-      </Routes>
+      <AppBar position="static">
+        <Toolbar>
+          <Button color="inherit" onClick={() => navigate("/")}>
+            🏠
+          </Button>
+          <Button color="inherit" onClick={() => navigate("/movies")}>
+            Movies
+          </Button>
+          <Button color="inherit" onClick={() => navigate("/colorbox")}>
+            ColorBox
+          </Button>
+          <Button color="inherit" onClick={() => navigate("/movies/AddMovie")}>
+            Add Movie
+          </Button>
+        </Toolbar>
+      </AppBar>
+      <div className="router-container">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/movies"
+            element={
+              <Movielist movielist={movielist} setmovielist={setmovielist} />
+            }
+          />
+          <Route
+            path="/movies/:id"
+            element={<MovieDetails movielist={movielist} />}
+          />
+          <Route path="/colorbox" element={<Addcolor />} />
+          <Route
+            path="/movies/AddMovie"
+            element={
+              <AddMovie movielist={movielist} setmovielist={setmovielist} />
+            }
+          />
+          <Route path="/404" element={<NotFoundPage />} />
+          <Route path="*" element={<Navigate replace to="/404" />} />
+        </Routes>
+      </div>
     </div>
   );
 }
 export default App;
 
-function Home() {
-  return (
-    <div>
-      <h2>Welcome to Home</h2>
-    </div>
-  );
-}
-
-function Movielist({ movielist, setmovielist }) {
+function AddMovie({ movielist, setmovielist }) {
+  const navigate = useNavigate();
   const [name, setname] = useState("");
   const [poster, setposter] = useState("");
   const [rating, setrating] = useState("");
   const [summary, setsummary] = useState("");
   const [trailer, settrailer] = useState("");
   return (
-    <div className="App">
-      {/* <Addcolor /> */}
+    <div>
       <div className="addmovie-form">
         <TextField
           id="standard-basic"
@@ -171,6 +185,7 @@ function Movielist({ movielist, setmovielist }) {
         <Button
           variant="contained"
           onClick={() => {
+            navigate("/movies");
             const newMovie = {
               name: name,
               poster: poster,
@@ -184,52 +199,80 @@ function Movielist({ movielist, setmovielist }) {
           AddMovie
         </Button>
       </div>
+    </div>
+  );
+}
+
+function Movielist({ movielist, setmovielist }) {
+  return (
+    <div className="App">
+      {/* <Addcolor /> */}
 
       <div className="movie-component">
         {movielist.map((mv, index) => (
-          <Movies movie={mv} id={index} />
+          <Movies
+            key={index}
+            movie={mv}
+            id={index}
+            deleteButton={
+              <IconButton
+                onClick={() => {
+                  let copiedmovielist = [...movielist];
+                  let removedmovie = copiedmovielist.splice(index, 1);
+                  console.log(removedmovie);
+                  setmovielist(copiedmovielist);
+                }}
+                color="error"
+              >
+                <DeleteIcon />
+              </IconButton>
+            }
+          />
         ))}
       </div>
     </div>
   );
 }
 
-function Movies({ movie, id }) {
+function Movies({ movie, id, deleteButton }) {
   const navigate = useNavigate();
   const styles = {
     color: movie.rating > 8 ? "green" : "red",
   };
   const [show, setShow] = useState(false);
   return (
-    <div className="movie-container">
+    <Card className="movie-container">
       <img src={movie.poster} alt={movie.name} className="movieposter" />
-      <div className="movie-spec">
-        <h2 className="movie-name">
-          {movie.name}
-          <IconButton
-            onClick={() => setShow(!show)}
-            className="toggle"
-            aria-label="Movie summmary"
-            color="primary"
-          >
-            {show ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          </IconButton>
-          <IconButton
-            onClick={() => navigate(`/movies/${id}`)}
-            aria-label="Movie Info"
-            color="primary"
-          >
-            <InfoIcon />
-          </IconButton>
-        </h2>
+      <CardContent>
+        <div className="movie-spec">
+          <h2 className="movie-name">
+            {movie.name}
+            <IconButton
+              onClick={() => setShow(!show)}
+              className="toggle"
+              aria-label="Movie summmary"
+              color="primary"
+            >
+              {show ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </IconButton>
+            <IconButton
+              onClick={() => navigate(`/movies/${id}`)}
+              aria-label="Movie Info"
+              color="primary"
+            >
+              <InfoIcon />
+            </IconButton>
+          </h2>
 
-        <p style={styles} className="movie-poster">
-          ⭐{movie.rating}
-        </p>
-      </div>
-
-      {show ? <p className="movie-summary">{movie.summary} </p> : ""}
-      <Counter />
-    </div>
+          <p style={styles} className="movie-rating">
+            ⭐{movie.rating}
+          </p>
+        </div>
+        {show ? <p>{movie.summary}</p> : ""}
+      </CardContent>
+      <CardActions>
+        <Counter /> {deleteButton}
+      </CardActions>
+    </Card>
   );
 }

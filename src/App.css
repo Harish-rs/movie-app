@@ -1,3 +1,7 @@
+.App {
+  margin: 16px;
+}
+
 .movieposter {
   width: 340px;
   height: 500px;
@@ -32,4 +36,13 @@
 
 .movie-detail-container {
   max-width: 800px;
+}
+
+.not-found {
+  width: "100%";
+  object-fit: "cover" s;
+}
+
+.router-container {
+  margin: 16px;
 }
