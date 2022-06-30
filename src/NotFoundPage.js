@@ -1,5 +1,6 @@
 import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; 
+import React from "react";
 
 export function NotFoundPage() {
   const navigate = useNavigate();

@@ -1,5 +1,6 @@
 // import logo from "./logo.svg";
 import "./App.css";
+import React from "react";
 import { Counter } from "./Counter";
 import { Addcolor } from "./ColorBox";
 import { useState } from "react";
@@ -119,7 +120,8 @@ export default function App() {
           <AppBar position="static">
             <Toolbar>
               <Button color="inherit" onClick={() => navigate("/")}>
-                🏠
+                <span>
+                🏠</span>
               </Button>
               <Button color="inherit" onClick={() => navigate("/movies")}>
                 Movies

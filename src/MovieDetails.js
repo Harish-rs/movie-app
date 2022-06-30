@@ -1,6 +1,7 @@
 import Button from "@mui/material/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import React from "react";
 
 export function MovieDetails({ movielist }) {
   const { id } = useParams();
