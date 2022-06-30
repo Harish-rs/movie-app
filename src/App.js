@@ -127,7 +127,7 @@ export default function App() {
                 Movies
               </Button>
               <Button color="inherit" onClick={() => navigate("/colorbox")}>
-                ColorBox
+                ColorBox1
               </Button>
               <Button
                 color="inherit"
