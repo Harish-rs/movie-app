@@ -66,9 +66,11 @@ export function AddMovie() {
               method: "POST",
               body: JSON.stringify(newMovie),
               headers: { "Content-Type": "application/json" },
-            }).then(() => {
-              navigate("/movies");
-            });
+            })
+              .then((data) => data.json())
+              .then(() => {
+                navigate("/movies");
+              });
           }}
         >
           AddMovie
