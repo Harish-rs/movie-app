@@ -3,12 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import React from "react";
 import { useState, useEffect } from "react";
+import { API } from "./global";
 
 export function MovieDetails() {
   const { id } = useParams();
   const [movie, setmovie] = useState([]);
   useEffect(() => {
-    fetch(`https://62dec963976ae7460be246b4.mockapi.io/movie/${id}`, {
+    fetch(`${API}/movie/${id}`, {
       method: "GET",
     })
       .then((data) => data.json())
