@@ -49,7 +49,7 @@ export function AddMovie() {
         <Button
           variant="contained"
           onClick={() => {
-            navigate("/movies");
+            //navigate("/movies");
             const newMovie = {
               name: name,
               poster: poster,
