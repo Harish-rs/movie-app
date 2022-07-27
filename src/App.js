@@ -1,32 +1,24 @@
 // import logo from "./logo.svg";
 import "./App.css";
 import React from "react";
-import { Counter } from "./Counter";
 import { Addcolor } from "./ColorBox";
 import { useState } from "react";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import IconButton from "@mui/material/IconButton";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Card from "@mui/material/Card";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import InfoIcon from "@mui/icons-material/Info";
 import { MovieDetails } from "./MovieDetails";
 import { Home, NotFoundPage } from "./NotFoundPage";
 import {
   AppBar,
-  CardActions,
-  CardContent,
   createTheme,
   Paper,
   ThemeProvider,
   Toolbar,
 } from "@mui/material";
+import { AddMovie } from "./AddMovie";
+import { Movielist } from "./Movielist";
 // import Box from "@mui/material/Box";
 
 // import { Addcolor } from "./ColorBox";
@@ -110,7 +102,7 @@ export default function App() {
       mode: mode,
     },
   });
-  const [movielist, setmovielist] = useState(Initial_MOVIE_LIST);
+  const [movielist, setmovielist] = useState([]);
   const navigate = useNavigate();
 
   return (
@@ -120,8 +112,7 @@ export default function App() {
           <AppBar position="static">
             <Toolbar>
               <Button color="inherit" onClick={() => navigate("/")}>
-                <span>
-                🏠</span>
+                <span>🏠</span>
               </Button>
               <Button color="inherit" onClick={() => navigate("/movies")}>
                 Movies
@@ -163,26 +154,10 @@ export default function App() {
           <div className="router-container">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route
-                path="/movies"
-                element={
-                  <Movielist
-                    movielist={movielist}
-                    setmovielist={setmovielist}
-                  />
-                }
-              />
-              <Route
-                path="/movies/:id"
-                element={<MovieDetails movielist={movielist} />}
-              />
+              <Route path="/movies" element={<Movielist />} />
+              <Route path="/movies/:id" element={<MovieDetails />} />
               <Route path="/colorbox" element={<Addcolor />} />
-              <Route
-                path="/movies/AddMovie"
-                element={
-                  <AddMovie movielist={movielist} setmovielist={setmovielist} />
-                }
-              />
+              <Route path="/movies/AddMovie" element={<AddMovie />} />
               <Route path="/404" element={<NotFoundPage />} />
               <Route path="*" element={<Navigate replace to="/404" />} />
             </Routes>
@@ -190,140 +165,5 @@ export default function App() {
         </div>
       </Paper>
     </ThemeProvider>
-  );
-}
-
-function AddMovie({ movielist, setmovielist }) {
-  const navigate = useNavigate();
-  const [name, setname] = useState("");
-  const [poster, setposter] = useState("");
-  const [rating, setrating] = useState("");
-  const [summary, setsummary] = useState("");
-  const [trailer, settrailer] = useState("");
-  return (
-    <div>
-      <div className="addmovie-form">
-        <TextField
-          id="standard-basic"
-          onChange={(event) => setname(event.target.value)}
-          label="Enter Movie name"
-          variant="standard"
-        />
-        <TextField
-          id="standard-basic"
-          onChange={(event) => setposter(event.target.value)}
-          label="Enter Movie poster URL"
-          variant="standard"
-        />
-        <TextField
-          id="standard-basic"
-          onChange={(event) => setrating(event.target.value)}
-          label="Enter Movie rating"
-          variant="standard"
-        />
-        <TextField
-          id="standard-basic"
-          onChange={(event) => setsummary(event.target.value)}
-          label="Enter Movie summary"
-          variant="standard"
-        />
-        <TextField
-          id="standard-basic"
-          onChange={(event) => settrailer(event.target.value)}
-          label="Enter Movie Trailer URL"
-          variant="standard"
-        />
-        <Button
-          variant="contained"
-          onClick={() => {
-            navigate("/movies");
-            const newMovie = {
-              name: name,
-              poster: poster,
-              rating: rating,
-              summary: summary,
-              trailer: trailer,
-            };
-            setmovielist([...movielist, newMovie]);
-          }}
-        >
-          AddMovie
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-function Movielist({ movielist, setmovielist }) {
-  return (
-    <div className="App">
-      {/* <Addcolor /> */}
-
-      <div className="movie-component">
-        {movielist.map((mv, index) => (
-          <Movies
-            key={index}
-            movie={mv}
-            id={index}
-            deleteButton={
-              <IconButton
-                onClick={() => {
-                  let copiedmovielist = [...movielist];
-                  let removedmovie = copiedmovielist.splice(index, 1);
-                  console.log(removedmovie);
-                  setmovielist(copiedmovielist);
-                }}
-                color="error"
-              >
-                <DeleteIcon />
-              </IconButton>
-            }
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Movies({ movie, id, deleteButton }) {
-  const navigate = useNavigate();
-  const styles = {
-    color: movie.rating > 8 ? "green" : "red",
-  };
-  const [show, setShow] = useState(false);
-  return (
-    <Card className="movie-container">
-      <img src={movie.poster} alt={movie.name} className="movieposter" />
-      <CardContent>
-        <div className="movie-spec">
-          <h2 className="movie-name">
-            {movie.name}
-            <IconButton
-              onClick={() => setShow(!show)}
-              className="toggle"
-              aria-label="Movie summmary"
-              color="primary"
-            >
-              {show ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </IconButton>
-            <IconButton
-              onClick={() => navigate(`/movies/${id}`)}
-              aria-label="Movie Info"
-              color="primary"
-            >
-              <InfoIcon />
-            </IconButton>
-          </h2>
-
-          <p style={styles} className="movie-rating">
-            ⭐{movie.rating}
-          </p>
-        </div>
-        {show ? <p>{movie.summary}</p> : ""}
-      </CardContent>
-      <CardActions>
-        <Counter /> {deleteButton}
-      </CardActions>
-    </Card>
   );
 }

@@ -2,10 +2,20 @@ import Button from "@mui/material/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import React from "react";
+import { useState, useEffect } from "react";
 
-export function MovieDetails({ movielist }) {
+export function MovieDetails() {
   const { id } = useParams();
-  const movie = movielist[id];
+  const [movie, setmovie] = useState([]);
+  useEffect(() => {
+    fetch(`https://62dec963976ae7460be246b4.mockapi.io/movie/${id}`, {
+      method: "GET",
+    })
+      .then((data) => data.json())
+      .then((mv) => setmovie(mv));
+  }, []);
+
+  //const movie = movielist[id];
   const navigate = useNavigate();
   return (
     <div>
