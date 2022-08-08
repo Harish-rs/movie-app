@@ -20,6 +20,7 @@ import {
 import { AddMovie } from "./AddMovie";
 import { Movielist } from "./Movielist";
 import { EditMovie } from "./EditMovie";
+import { BasicForm } from "./BasicForm";
 // import Box from "@mui/material/Box";
 
 // import { Addcolor } from "./ColorBox";
@@ -159,6 +160,7 @@ export default function App() {
               <Route path="/movies/:id" element={<MovieDetails />} />
               <Route path="/colorbox" element={<Addcolor />} />
               <Route path="/movies/AddMovie" element={<AddMovie />} />
+              <Route path="/movies/basicform" element={<BasicForm />} />
               <Route path="/movies/edit/:id" element={<EditMovie />} />
               <Route path="/404" element={<NotFoundPage />} />
               <Route path="*" element={<Navigate replace to="/404" />} />
