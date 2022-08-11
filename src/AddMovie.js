@@ -51,15 +51,15 @@ export function AddMovie() {
     // 3.headers - JSON
     console.log("onSubmit", newMovie);
 
-    // fetch(`${API}/movie`, {
-    //   method: "POST",
-    //   body: JSON.stringify(newMovie),
-    //   headers: { "Content-Type": "application/json" },
-    // })
-    //   .then((data) => data.json())
-    //   .then(() => {
-    //     navigate("/movies");
-    //   });
+    fetch(`${API}/movie`, {
+      method: "POST",
+      body: JSON.stringify(newMovie),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((data) => data.json())
+      .then(() => {
+        navigate("/movies");
+      });
   };
 
   return (
