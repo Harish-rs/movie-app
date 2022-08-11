@@ -49,7 +49,7 @@ export function AddMovie() {
     // 1.method =post
     // 2.body - data - JSON.stringify
     // 3.headers - JSON
-    console.log("onSubmit", newMovie);
+    // console.log("onSubmit", newMovie);
 
     fetch(`${API}/movie`, {
       method: "POST",
