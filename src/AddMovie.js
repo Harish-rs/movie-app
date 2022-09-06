@@ -51,7 +51,7 @@ export function AddMovie() {
     // 3.headers - JSON
     // console.log("onSubmit", newMovie);
 
-    fetch(`${API}/movie`, {
+    fetch(`${API}/movies`, {
       method: "POST",
       body: JSON.stringify(newMovie),
       headers: { "Content-Type": "application/json" },

@@ -9,7 +9,7 @@ export function MovieDetails() {
   const { id } = useParams();
   const [movie, setmovie] = useState([]);
   useEffect(() => {
-    fetch(`${API}/movie/${id}`, {
+    fetch(`${API}/movies/${id}`, {
       method: "GET",
     })
       .then((data) => data.json())
